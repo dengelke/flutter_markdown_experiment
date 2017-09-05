@@ -1,4 +1,4 @@
-name: markdown
+name: flutter_markdown_experiment
 description: A markdown reader.
 
 dependencies:
@@ -40,7 +40,21 @@ flutter:
   # assets:
   #  - packages/PACKAGE_NAME/path/to/asset
   assets:
-    - assets/ch1.md
+    - assets/book/README.md
+    - assets/book/apA.md
+    - assets/book/ch1.md
+    - assets/book/ch2.md
+    - assets/book/ch3.md
+    - assets/book/cover.jpg
+    - assets/book/fig1.png
+    - assets/book/fig2.png
+    - assets/book/fig3.png
+    - assets/book/fig4.png
+    - assets/book/fig5.png
+    - assets/book/fig6.png
+    - assets/book/foreword.md
+    - assets/book/index.json
+    - assets/book/toc.md
 
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a

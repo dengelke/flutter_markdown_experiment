@@ -1,5 +1,7 @@
-import 'dart:io';
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -22,11 +24,27 @@ class FlutterDemo extends StatefulWidget {
 }
 
 class _FlutterDemoState extends State<FlutterDemo> {
+  List contents;
   String markdown;
+  int contentsIndex = 0;
+
   @override
   void initState() {
     super.initState();
-    _readMarkdown().then((String value) {
+    _readFolder()
+    .then((List value) {
+      setState(() {
+        contents = value;
+      });
+    }).then((Future value) {
+      return _updateMarkdown();
+    });
+  }
+
+  Future _updateMarkdown() async {
+    print('_updateMarkdown $contents $contentsIndex ${markdown.substring(0, 59)}');
+    await _getFileData('assets/book/${contents[contentsIndex]}')
+    .then((String value) {
       setState(() {
         markdown = value;
       });
@@ -37,17 +55,33 @@ class _FlutterDemoState extends State<FlutterDemo> {
     return await rootBundle.loadString(path);
   }
 
-  Future<String> _readMarkdown() async {
+  Future<List> _readFolder() async {
     try {
-      var fileName = 'assets/ch1.md';
-      String data = await _getFileData(fileName);
-      return data;
+      // var fileName = 'assets/book/ch1.md';
+      String data = await _getFileData('assets/book/index.json');
+      List parsedList = JSON.decode(data);
+      return parsedList;
     } on FileSystemException {
       print('exception');
-      return 'error';
+      return [];
     }
   }
 
+  back() async {
+    print('back $contents $contentsIndex');
+    setState(() {
+      contentsIndex = contentsIndex == 0 ? contents.length - 1 : contentsIndex - 1;
+    });
+    await _updateMarkdown();
+  }
+
+  forward() async {
+    print('forward $contents $contentsIndex');
+    setState(() {
+      contentsIndex = contentsIndex == contents.length - 1 ? 0 : contentsIndex + 1;
+    });
+    await _updateMarkdown();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +89,10 @@ class _FlutterDemoState extends State<FlutterDemo> {
     return new Scaffold(
       appBar: new AppBar(title: new Text("You Don't Know JS")),
       body: markdown.length > 0 ? new Markdown(data: markdown) : null,
+      persistentFooterButtons: [
+        new FlatButton(child: new Icon(Icons.arrow_back), onPressed: back),
+        new FlatButton(child: new Icon(Icons.arrow_forward), onPressed: forward),
+      ]
     );
   }
 }
