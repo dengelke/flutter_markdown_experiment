@@ -42,7 +42,6 @@ class _FlutterDemoState extends State<FlutterDemo> {
   }
 
   Future _updateMarkdown() async {
-    print('_updateMarkdown $contents $contentsIndex ${JSON.encode(contents[contentsIndex])}');
     await _getFileData('assets/book/${contents[contentsIndex]["file"]}')
     .then((String value) {
       setState(() {
@@ -68,7 +67,6 @@ class _FlutterDemoState extends State<FlutterDemo> {
   }
 
   back() {
-    print('back $contents $contentsIndex');
     setState(() {
       contentsIndex = contentsIndex == 0 ? contents.length - 1 : contentsIndex - 1;
     });
@@ -76,7 +74,6 @@ class _FlutterDemoState extends State<FlutterDemo> {
   }
 
   forward() {
-    print('forward $contents $contentsIndex');
     setState(() {
       contentsIndex = contentsIndex == contents.length - 1 ? 0 : contentsIndex + 1;
     });
