@@ -42,8 +42,8 @@ class _FlutterDemoState extends State<FlutterDemo> {
   }
 
   Future _updateMarkdown() async {
-    print('_updateMarkdown $contents $contentsIndex');
-    await _getFileData('assets/book/${contents[contentsIndex]}')
+    print('_updateMarkdown $contents $contentsIndex ${JSON.encode(contents[contentsIndex])}');
+    await _getFileData('assets/book/${contents[contentsIndex]["file"]}')
     .then((String value) {
       setState(() {
         markdown = value;
@@ -88,10 +88,15 @@ class _FlutterDemoState extends State<FlutterDemo> {
     
     return new Scaffold(
       appBar: new AppBar(title: new Text("You Don't Know JS")),
-      body: markdown != null ? new Markdown(data: markdown) : null,
+      body: new Markdown(data: markdown != null ? markdown : ''),
       persistentFooterButtons: [
-        new FlatButton(child: new Icon(Icons.arrow_back), onPressed: back),
-        new FlatButton(child: new Icon(Icons.arrow_forward), onPressed: forward),
+        new Row(children: [
+          new FlatButton(child: new Icon(Icons.arrow_back), onPressed: back),
+          new Text(
+            '${contents != null && contents[contentsIndex] != null ? contents[contentsIndex]["title"] : ""}',
+          ),
+          new FlatButton(child: new Icon(Icons.arrow_forward), onPressed: forward)],
+        )
       ]
     );
   }

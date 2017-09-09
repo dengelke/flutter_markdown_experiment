@@ -1,8 +1,8 @@
 [
-  "foreword.md",
-  "toc.md",
-  "ch1.md",
-  "ch2.md",
-  "ch3.md",
-  "apA.md"
+  {"file": "foreword.md", "title": "Foreword"},
+  {"file": "toc.md", "title": "toc"},
+  {"file": "ch1.md", "title": "Chapter 1"},
+  {"file": "ch2.md", "title": "Chapter 2"},
+  {"file": "ch3.md", "title": "Chapter 3"},
+  {"file": "apA.md", "title": "Appendix A"}
 ]
