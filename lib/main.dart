@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_markdown/flutter_markdown.dart';
 
+import 'package:google_sign_in/google_sign_in.dart';   
+
 void main() {
   runApp(
     new MaterialApp(
@@ -18,12 +20,12 @@ void main() {
 
 class FlutterDemo extends StatefulWidget {
   FlutterDemo({Key key}) : super(key: key);
-
   @override
   _FlutterDemoState createState() => new _FlutterDemoState();
 }
 
 class _FlutterDemoState extends State<FlutterDemo> {
+  final googleSignIn = new GoogleSignIn();   
   List contents;
   String markdown;
   int contentsIndex = 0;
@@ -31,14 +33,26 @@ class _FlutterDemoState extends State<FlutterDemo> {
   @override
   void initState() {
     super.initState();
-    _readFolder()
+    _ensureLoggedIn()
+    .then((Future value) {
+      return _readFolder();
+    })
     .then((List value) {
       setState(() {
         contents = value;
       });
     }).then((Future value) {
-      return _updateMarkdown();
+      _updateMarkdown();
     });
+  }
+
+  Future<Null> _ensureLoggedIn() async {
+    GoogleSignInAccount user = googleSignIn.currentUser;
+    if (user == null)
+      user = await googleSignIn.signInSilently();
+    if (user == null) {
+      await googleSignIn.signIn();
+    }
   }
 
   Future _updateMarkdown() async {
