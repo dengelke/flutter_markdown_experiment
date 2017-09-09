@@ -67,20 +67,20 @@ class _FlutterDemoState extends State<FlutterDemo> {
     }
   }
 
-  back() async {
+  back() {
     print('back $contents $contentsIndex');
     setState(() {
       contentsIndex = contentsIndex == 0 ? contents.length - 1 : contentsIndex - 1;
     });
-    await _updateMarkdown();
+    _updateMarkdown();
   }
 
-  forward() async {
+  forward() {
     print('forward $contents $contentsIndex');
     setState(() {
       contentsIndex = contentsIndex == contents.length - 1 ? 0 : contentsIndex + 1;
     });
-    await _updateMarkdown();
+    _updateMarkdown();
   }
 
   @override
