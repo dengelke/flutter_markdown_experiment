@@ -10,6 +10,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart'; 
 
+import 'fb/fb.dart' as fb;
+
 void main() {
   runApp(
     new MaterialApp(
@@ -29,7 +31,8 @@ class FlutterDemo extends StatefulWidget {
 class _FlutterDemoState extends State<FlutterDemo> {
   final googleSignIn = new GoogleSignIn();   
   final analytics = new FirebaseAnalytics(); 
-  final auth = FirebaseAuth.instance;    
+  final auth = FirebaseAuth.instance;
+
   List contents;
   String markdown;
   int contentsIndex = 0;
@@ -37,10 +40,7 @@ class _FlutterDemoState extends State<FlutterDemo> {
   @override
   void initState() {
     super.initState();
-    _ensureLoggedIn()
-    .then((Future value) {
-      return _readFolder();
-    })
+    _readFolder()
     .then((List value) {
       setState(() {
         contents = value;
@@ -50,22 +50,42 @@ class _FlutterDemoState extends State<FlutterDemo> {
     });
   }
 
-  Future<Null> _ensureLoggedIn() async {
+  Future<Null> _signOut() async {
+    await _currentUser();
+    await auth.signOut();
+  }
+
+  Future<Null> _googleLogin() async {
+    await _currentUser();
     GoogleSignInAccount user = googleSignIn.currentUser;
     if (user == null)
       user = await googleSignIn.signInSilently();
     if (user == null) {
       await googleSignIn.signIn();
-      analytics.logLogin();
     }
-    if (await auth.currentUser() == null) {                          //new
-      GoogleSignInAuthentication credentials =                       //new
-      await googleSignIn.currentUser.authentication;                 //new
-      await auth.signInWithGoogle(                                   //new
-        idToken: credentials.idToken,                                //new
-        accessToken: credentials.accessToken,                        //new
-      );                                                             //new
-    }  
+    if (await auth.currentUser() == null) {      
+      GoogleSignInAuthentication credentials = 
+      await googleSignIn.currentUser.authentication;
+      await auth.signInWithGoogle(
+        idToken: credentials.idToken,
+        accessToken: credentials.accessToken,
+      );
+    }
+  }
+
+  Future<Null> _facebookLogin() async {
+    await _currentUser();
+    if (await auth.currentUser() == null) {  
+      final fb.Token _token = await fb.getToken();
+      await auth.signInWithFacebook(
+        accessToken: _token.access,
+      );
+    }
+  }
+
+  Future<Null> _currentUser() async {
+    var user = await auth.currentUser();
+    print('User ${user != null ? user.providerData : "none"}');
   }
 
   Future _updateMarkdown() async {
@@ -115,12 +135,31 @@ class _FlutterDemoState extends State<FlutterDemo> {
       body: new Markdown(data: markdown != null ? markdown : ''),
       persistentFooterButtons: [
         new Row(children: [
-          new FlatButton(child: new Icon(Icons.arrow_back), onPressed: back),
-          new Text(
-            '${contents != null && contents[contentsIndex] != null ? contents[contentsIndex]["title"] : ""}',
+          new RaisedButton(
+            child: new Text("Facebook"),
+            onPressed: () async {
+              await _facebookLogin();
+            }
           ),
-          new FlatButton(child: new Icon(Icons.arrow_forward), onPressed: forward)],
-        )
+          new RaisedButton(
+            child: new Text("Google"),
+            onPressed: () async {
+              await _googleLogin();
+            }
+          ),
+          new RaisedButton(
+            child: new Text("Signout"),
+            onPressed: () async {
+              await _signOut();
+            }
+          ),
+        ])
+
+          // new FlatButton(child: new Icon(Icons.arrow_back), onPressed: back),
+          // new Text(
+          //   '${contents != null && contents[contentsIndex] != null ? contents[contentsIndex]["title"] : ""}',
+          // ),
+          // new FlatButton(child: new Icon(Icons.arrow_forward), onPressed: forward)],
       ]
     );
   }

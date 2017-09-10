@@ -50,6 +50,8 @@ PODS:
     - FirebaseUI/Auth
     - GoogleSignIn (~> 4.0)
   - Flutter (1.0.0)
+  - flutter_webview_plugin (0.0.1):
+    - Flutter
   - Google/Core (3.1.0):
     - FirebaseAnalytics (~> 3.2)
   - Google/SignIn (3.1.0):
@@ -87,6 +89,7 @@ DEPENDENCIES:
   - firebase_database (from `/Users/Gelks/.pub-cache/hosted/pub.dartlang.org/firebase_database-0.0.12/ios`)
   - firebase_storage (from `/Users/Gelks/.pub-cache/hosted/pub.dartlang.org/firebase_storage-0.0.5/ios`)
   - Flutter (from `/Users/Gelks/Documents/Dev/flutter/flutter/bin/cache/artifacts/engine/ios`)
+  - flutter_webview_plugin (from `/Users/Gelks/.pub-cache/hosted/pub.dartlang.org/flutter_webview_plugin-0.0.6/ios`)
   - google_sign_in (from `/Users/Gelks/.pub-cache/hosted/pub.dartlang.org/google_sign_in-0.3.1/ios`)
 
 EXTERNAL SOURCES:
@@ -100,6 +103,8 @@ EXTERNAL SOURCES:
     :path: /Users/Gelks/.pub-cache/hosted/pub.dartlang.org/firebase_storage-0.0.5/ios
   Flutter:
     :path: /Users/Gelks/Documents/Dev/flutter/flutter/bin/cache/artifacts/engine/ios
+  flutter_webview_plugin:
+    :path: /Users/Gelks/.pub-cache/hosted/pub.dartlang.org/flutter_webview_plugin-0.0.6/ios
   google_sign_in:
     :path: /Users/Gelks/.pub-cache/hosted/pub.dartlang.org/google_sign_in-0.3.1/ios
 
@@ -117,6 +122,7 @@ SPEC CHECKSUMS:
   FirebaseStorage: a5c55b23741a49a72af8f30f95b3bb5ddbeda12d
   FirebaseUI: 6e99ff95e369f5858232e4f65bff215458fe8469
   Flutter: d674e78c937094a75ac71dd77e921e840bea3dbf
+  flutter_webview_plugin: ed9e8a6a96baf0c867e90e1bce2673913eeac694
   Google: 98da4b1a60ed0beb80a290387a28333406a1eb90
   google_sign_in: 24ea34feed2d7d04e957cd1c4daf063c488532c2
   GoogleSignIn: d7ad83f13480e1f30453471d00d19b5293ac46af
