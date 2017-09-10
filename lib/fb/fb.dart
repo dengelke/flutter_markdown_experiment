@@ -1,5 +1,3 @@
-library fb;
-
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -9,7 +7,6 @@ import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 
 import 'config.dart'; // Config file
 import 'token.dart';
-
 export 'token.dart';
 
 Future<Token> getToken() async {
@@ -31,9 +28,7 @@ Future<Stream<String>> _server() async {
   server.listen((HttpRequest request) async {
     final String code = request.uri.queryParameters["code"];
     request.response
-      ..statusCode = 200
-      ..headers.set("Content-Type", ContentType.HTML.mimeType)
-      ..write("<html><h1>You can now close this window</h1></html>");
+      ..statusCode = 200;
     await request.response.close();
     await server.close(force: true);
     onCode.add(code);
