@@ -7,6 +7,8 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_markdown/flutter_markdown.dart';
 
 import 'package:google_sign_in/google_sign_in.dart';   
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_auth/firebase_auth.dart'; 
 
 void main() {
   runApp(
@@ -26,6 +28,8 @@ class FlutterDemo extends StatefulWidget {
 
 class _FlutterDemoState extends State<FlutterDemo> {
   final googleSignIn = new GoogleSignIn();   
+  final analytics = new FirebaseAnalytics(); 
+  final auth = FirebaseAuth.instance;    
   List contents;
   String markdown;
   int contentsIndex = 0;
@@ -52,7 +56,16 @@ class _FlutterDemoState extends State<FlutterDemo> {
       user = await googleSignIn.signInSilently();
     if (user == null) {
       await googleSignIn.signIn();
+      analytics.logLogin();
     }
+    if (await auth.currentUser() == null) {                          //new
+      GoogleSignInAuthentication credentials =                       //new
+      await googleSignIn.currentUser.authentication;                 //new
+      await auth.signInWithGoogle(                                   //new
+        idToken: credentials.idToken,                                //new
+        accessToken: credentials.accessToken,                        //new
+      );                                                             //new
+    }  
   }
 
   Future _updateMarkdown() async {
